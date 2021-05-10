@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GitHub Commits</title>
+    <script src="https://unpkg.com/vue"></script>    
+  </head>
+  <body>
+
+  	<div id="git">
+
+  		<h1>Latest Commits</h1>
+
+  		<template v-for = "branch in branches">
+
+  			<input type = "radio" :name="branch"
+
+  			       :id="branch" :value="branch" v-model="currentBranch">
+
+  			<label :for="branch"> [[ branch ]] </label>
+
+  		</template>
+
+        <p>vuejs/vue@ [[ currentBranch ]] </p>
+
+        <ul>
+
+            <li v-for = "record in commits">
+
+            	<a :href="record.html_url" target="_blank" class="commit"> [[ record.sha.slice(0,10) ]] </a>
+
+            	- <span class="message">[[ record.commit.message | truncate ]]</span>
+
+            	<br/>
+
+            	by <span class="author"><a :href="record.author.html_url" target="_blank"
+            		>[[ record.commit.author.name ]]</a></span> 
+
+            	at <span class="date"> [[ record.commit.author.date | formatDate ]] </span>
+
+            </li>	
+
+        </ul>	
+
+  	</div>	
+
+  </body>
+
+<script>
+
+	var apiURL = "https://api.github.com/repos/angular/angular/commits?per_page=3&sha="
+
+	var gitub = new Vue({
+
+		        el: "#git",
+
+		        delimiters: ['[[', ']]'],
+
+		        data: {
+
+		        	  commits: null,
+
+		        	  branches: ["master","g3"],
+
+		        	  currentBranch: "master"
+		        },
+
+		        created: function() {
+
+                         this.fetchData()
+                },
+
+		        watch: {
+
+		        	currentBranch: "fetchData"
+		        },
+
+		        filters: {
+
+                  truncate: function(v) {
+            
+                  var newline = v.indexOf("\n");
+
+                  return newline > 0 ? v.slice(0, newline) : v;
+                },
+
+                formatDate: function(v) {
+
+                   return v.replace(/T|Z/g, " ");
+                }
+
+                },
+
+		        methods: {
+
+                    fetchData: function(){
+
+                        var xhr = new XMLHttpRequest(),
+
+                        self = this;
+
+                        xhr.open("GET", apiURL + self.currentBranch)
+
+                        xhr.onload = function() { 
+
+                        self.commits = JSON.parse(xhr.responseText)
+
+                        console.log(xhr.responseText)                                                      
+                        }
+
+                        xhr.send()
+                    }
+                        
+		        }
+	})
+
+</script>
+
+<style type="text/css">
+	
+#git {
+  font-family: "Helvetica", Arial, sans-serif;
+  font-size: 35px;
+}
+a {
+  text-decoration: none;
+  color: mediumseagreen;
+}
+li {
+  line-height: 1.5em;
+  margin-bottom: 20px;
+}
+.author,
+.date {
+  font-weight: bold;
+}
+
+</style>
+</html>
