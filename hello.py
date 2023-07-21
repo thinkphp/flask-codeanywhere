@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():    
 
-    out  = "<!DOCTYPE html><head><title>Rails</title></head><h1 style='font-size: 70px;'>Web Development - <mark>Flask</mark></h1>"
+    out  = "<!DOCTYPE html><head><title>Flask</title></head><h1 style='font-size: 70px;'>Web Development - <mark>Flask</mark></h1>"
 
     out += "<div style='color: lightgreen;font-size: 40px'><a href='/home'>Home</a> | <a href='/about'>About</a> | <a href='/projects'>Projects</a> | <a href='/github'>GitHub</a> | <a href='/contact'>Contact</a> | <a href='/vue2'>vue2</a> | <a href='/myip'>MyIP</a> | <a href='/gitcommits'>GitHubCommits</a>  </div>"
 
